@@ -1,5 +1,5 @@
-const { Customer } = require("../models");
-const sequelize = require("../models").sequelize;
+const db = require('../models'); 
+const Customer = db.Customer;
 
 // Create a new customer
 exports.createCustomer = async (req, res) => {

@@ -2,7 +2,7 @@
 
 module.exports = (sequelize, DataTypes) => {
   const Customer = sequelize.define(
-    "Customers",
+    "Customer", // Changed from "Customers" to "Customer"
     {
       id: {
         type: DataTypes.INTEGER,
@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       gmail: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: true,
+        },
       },
       number: {
         type: DataTypes.BIGINT,
@@ -42,7 +46,14 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Customer.associate = function (models) {
-    Customer.hasMany(models.Invoice, { foreignKey: "customer_id" });
+    // Make sure models.Invoice exists
+    if (!models.Invoice) {
+      throw new Error("Invoice model is not defined");
+    }
+    Customer.hasMany(models.Invoice, {
+      foreignKey: "customer_id",
+      as: "invoices", // Adding an alias for better readability
+    });
   };
 
   return Customer;
